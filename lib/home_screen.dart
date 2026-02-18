@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   PopupMenuItem(
                       value: 7,
-                      child: Text('Settings')
+                      child: Text('settings')
 
                   ),
                 ],
