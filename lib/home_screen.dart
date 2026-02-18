@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.teal,
           bottom: TabBar(
             tabs: [
-              Tab(child: Text('Chats')),
+              Tab(child: Text('Chat')),
               Tab(child: Text('Status')),
               Tab(child: Text('Calls')),
             ],
