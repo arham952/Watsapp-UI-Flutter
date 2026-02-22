@@ -1,139 +1,85 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:whatsapp_ui/call_screen.dart';
+import 'package:whatsapp_ui/chat_screen.dart';
+import 'package:whatsapp_ui/status_screen.dart';
 
-
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
+  final controller = Get.put(NavigationController());
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
 
-class _HomeScreenState extends State<HomeScreen> {
-  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'WhatsApp',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'WhatsApp',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
-          centerTitle: false,
-          backgroundColor: Colors.teal,
-          bottom: TabBar(
-            tabs: [
-              Tab(child: Text('Chat')),
-              Tab(child: Text('Status')),
-              Tab(child: Text('Calls')),
+        ),
+        centerTitle: false,
+        backgroundColor: Colors.teal,
+        actions: [
+          Icon(Icons.camera_alt_outlined),
+          SizedBox(width: 10),
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 1, child: Text('New Group')),
+              PopupMenuItem(value: 2, child: Text('New Community')),
+              PopupMenuItem(value: 3, child: Text('Broadcast lists')),
+              PopupMenuItem(value: 4, child: Text('Linked devices')),
+              PopupMenuItem(value: 5, child: Text('Starred')),
+              PopupMenuItem(value: 6, child: Text('Read all')),
+              PopupMenuItem(value: 7, child: Text('Settings')),
             ],
           ),
-          actions: [
-            Icon(Icons.camera_alt_outlined),
-            SizedBox(width: 10),
-            PopupMenuButton(
-              icon: Icon(Icons.more_vert),
-                itemBuilder: (context,) => [
-                  PopupMenuItem(
-                    value: 1,
-                      child: Text('New Group')
+          SizedBox(width: 10),
+        ],
+      ),
 
-                  ),
-                  PopupMenuItem(
-                      value: 2,
-                      child: Text('New Community')
+      bottomNavigationBar: Obx(
+        () => NavigationBar(
+            height: 80,
+            elevation: 0,
+            selectedIndex: controller.selectedIndex.value,
+            onDestinationSelected: controller.changePage,
 
-                  ),
-                  PopupMenuItem(
-                      value: 3,
-                      child: Text('Broadcast lists')
 
-                  ),
-                  PopupMenuItem(
-                      value: 4,
-                      child: Text('Linked devices')
+            destinations: [
+              NavigationDestination(icon: Icon(Icons.chat), label: 'Chats'),
+              NavigationDestination(icon: Icon(Icons.update_outlined), label: 'Updates'),
+              NavigationDestination(icon: Icon(Icons.call_sharp), label: 'Calls'),
+            ]),
+      ),
 
-                  ),
-                  PopupMenuItem(
-                      value: 5,
-                      child: Text('Starred')
 
-                  ),
-                  PopupMenuItem(
-                      value: 6,
-                      child: Text('Read all')
-
-                  ),
-                  PopupMenuItem(
-                      value: 7,
-                      child: Text('settings')
-
-                  ),
-                ],
-
-            ),
-            SizedBox(width: 10),
-          ],
-        ),
-
-        body: TabBarView(
-          children: [
-            ListView.builder(
-                itemCount: 210,
-                itemBuilder: (context, index){
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D'),
-                ),
-                title: Text('John Wick'),
-                subtitle: Text('Where I am going? '),
-                trailing: Text('8:45PM'),
-              );
-            }),
-            ListView.builder(
-
-              itemCount: 20,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context,index){
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: NetworkImage('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D'),
-                          radius: 30,
-
-                        ),
-
-                      ],
-                    ),
-                  );
-
-              }
-            ),
-            ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context,index){
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8cG9ydHJhaXR8ZW58MHx8MHx8fDA%3D'),
-                ),
-                title: Text('John Wick'),
-                subtitle: Row(children: [ Icon(Icons.call_received, color: Colors.lightGreen,),Text('Today, 4:34AM')]),
-                trailing: Icon(index / 2 == 0? Icons.call : Icons.videocam_outlined),
-                
-              );
-            },
-            ),
-          ],
+      body: SafeArea(
+        child: PageView(
+          controller: controller.pageController,
+          onPageChanged: controller.onPageChanged,
+          children: controller.screens,
         ),
       ),
     );
   }
+}
+
+class NavigationController extends GetxController{
+ final Rx<int> selectedIndex = 0.obs;
+ final PageController pageController = PageController();
+
+ final List<Widget> screens = [ChatScreen(),StatusScreen(),CallScreen()];
+
+ void changePage(int index){
+   selectedIndex.value = index;
+   pageController.animateToPage(index, duration: Duration(microseconds: 300), curve: Curves.easeInOut);
+ }
+ void onPageChanged(int index){
+   selectedIndex.value = index;
+ }
 }
