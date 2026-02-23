@@ -30,7 +30,7 @@ class StatusScreen extends StatelessWidget {
                         radius: 30,
                       ),
                       SizedBox(height: 10),
-                      Text('Arham'),
+                      Text('Arham '),
                     ],
                   ),
                 );
